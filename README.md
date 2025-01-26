@@ -5,7 +5,7 @@ You can use the commands in the makefile to set up the project, just take a look
 make build
 make fixtures
 
-### Explanation of choices
+## Explanation of choices
 
 For the GraphQL endpoint part I have decided to use the existing ApiPlatform setup, to keep things simple.
 For input validation I have decided to use Asserts in the entities, although I was tempted to use Dto's.
