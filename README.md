@@ -2,8 +2,8 @@
 ## Project Setup
 You can use the commands in the makefile to set up the project, just take a look
 
-make build
-make fixtures
+- make build
+- make fixtures
 
 ## Explanation of choices
 
