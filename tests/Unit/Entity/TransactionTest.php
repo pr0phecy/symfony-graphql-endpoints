@@ -13,6 +13,9 @@ use Ramsey\Uuid\Uuid;
 
 final class TransactionTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testConstructorGeneratesRandomUuid(): void
     {
         $transaction = new Transaction();
@@ -22,6 +25,7 @@ final class TransactionTest extends TestCase
     }
 
     /**
+     * @return void
      * @throws Exception
      */
     public function testSetAndGetTrade(): void
@@ -33,6 +37,9 @@ final class TransactionTest extends TestCase
         self::assertSame($trade, $transaction->getTrade());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetClientName(): void
     {
         $transaction = new Transaction();
@@ -41,6 +48,9 @@ final class TransactionTest extends TestCase
         self::assertSame('John Doe', $transaction->getClientName());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetPrice(): void
     {
         $transaction = new Transaction();
@@ -49,6 +59,9 @@ final class TransactionTest extends TestCase
         self::assertSame(100.50, $transaction->getPrice());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetCommodity(): void
     {
         $transaction = new Transaction();
@@ -57,6 +70,9 @@ final class TransactionTest extends TestCase
         self::assertSame('Oil', $transaction->getCommodity());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetVolume(): void
     {
         $transaction = new Transaction();
@@ -65,6 +81,9 @@ final class TransactionTest extends TestCase
         self::assertSame(500, $transaction->getVolume());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetType(): void
     {
         $transaction = new Transaction();
@@ -73,6 +92,9 @@ final class TransactionTest extends TestCase
         self::assertSame('buy', $transaction->getType());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetCreatedAt(): void
     {
         $transaction = new Transaction();
@@ -82,6 +104,9 @@ final class TransactionTest extends TestCase
         self::assertInstanceOf(DateTimeImmutable::class, $transaction->getCreatedAt());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetUpdatedAt(): void
     {
         $transaction = new Transaction();
@@ -91,6 +116,9 @@ final class TransactionTest extends TestCase
         self::assertInstanceOf(DateTimeImmutable::class, $transaction->getUpdatedAt());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetDeletedAt(): void
     {
         $deletedAt = new DateTimeImmutable();

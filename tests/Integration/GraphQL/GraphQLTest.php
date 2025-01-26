@@ -8,7 +8,6 @@ use App\Entity\Transaction;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use JsonException;
-use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;

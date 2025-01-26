@@ -12,6 +12,9 @@ use Random\RandomException;
 
 final class TradeTest extends TestCase
 {
+    /**
+     * @return void
+     */
     public function testConstructorGeneratesRandomUuid(): void
     {
         $trade = new Trade();
@@ -21,6 +24,7 @@ final class TradeTest extends TestCase
     }
 
     /**
+     * @return void
      * @throws RandomException
      */
     public function testSetAndGetNumber(): void
@@ -31,6 +35,9 @@ final class TradeTest extends TestCase
         self::assertMatchesRegularExpression('/^[a-f0-9]{10}$/', $trade->getNumber());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetDate(): void
     {
         $trade = new Trade();
@@ -41,6 +48,9 @@ final class TradeTest extends TestCase
         self::assertSame('2024-01-01', $trade->getDate());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetNote(): void
     {
         $trade = new Trade();
@@ -51,6 +61,9 @@ final class TradeTest extends TestCase
         self::assertSame($note, $trade->getNote());
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetCreatedAt(): void
     {
         $trade = new Trade();
@@ -61,6 +74,9 @@ final class TradeTest extends TestCase
         self::assertEqualsWithDelta(new DateTimeImmutable(), $createdAt, 1);
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetUpdatedAt(): void
     {
         $trade = new Trade();
@@ -71,6 +87,9 @@ final class TradeTest extends TestCase
         self::assertEqualsWithDelta(new DateTimeImmutable(), $updatedAt, 1);
     }
 
+    /**
+     * @return void
+     */
     public function testSetAndGetDeletedAt(): void
     {
         $trade = new Trade();
