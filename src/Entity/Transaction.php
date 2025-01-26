@@ -2,55 +2,99 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\Get;
-use App\Repository\TransactionRepository;
-use ApiPlatform\Metadata\ApiResource;
-use DateTimeInterface;
+use Ramsey\Uuid\Uuid;
 use Doctrine\DBAL\Types\Types;
+use Ramsey\Uuid\UuidInterface;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\TransactionRepository;
+use ApiPlatform\Metadata\GraphQl\Mutation;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use ApiPlatform\Metadata\GraphQl\QueryCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
-    operations: [
-        new Get(),
-    ],
+    graphQlOperations: [
+        new QueryCollection(
+            description: 'Fetch a collection of transactions',
+            name: 'collection_query'
+        ),
+        new Mutation(
+            description: 'Create a new transaction',
+            name: 'create',
+        ),
+    ]
 )]
 #[ORM\Table(name: 'transaction')]
+#[HasLifecycleCallbacks]
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
 class Transaction
 {
     #[ORM\Id]
-    #[ORM\Column(type: Types::INTEGER)]
-    private int $id;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private UuidInterface $id;
 
     #[ORM\ManyToOne(targetEntity: Trade::class, inversedBy: 'transactions')]
     #[ORM\JoinColumn(nullable: false)]
     private Trade $trade;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
+    #[Assert\NotNull(message: 'The client name cannot be null.')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'The client name cannot be longer than {{ limit }} characters.'
+    )]
     private string $clientName;
 
     #[ORM\Column(type: Types::FLOAT, nullable: false)]
+    #[Assert\NotNull(message: 'The price cannot be null.')]
+    #[Assert\Type(
+        type: 'float',
+        message: 'The price must be a valid float value.'
+    )]
+    #[Assert\Positive(message: 'The price must be a positive number.')]
     private float $price;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
+    #[Assert\NotNull(message: 'The commodity cannot be null.')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'The commodity cannot be longer than {{ limit }} characters.'
+    )]
     private string $commodity;
 
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
+    #[Assert\NotNull(message: 'The volume cannot be null.')]
+    #[Assert\Type(
+        type: 'integer',
+        message: 'The volume must be a valid integer.'
+    )]
+    #[Assert\Positive(message: 'The volume must be a positive number.')]
     private int $volume;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Assert\NotNull(message: 'The type cannot be null.')]
+    #[Assert\Choice(
+        choices: ['buy', 'sell'],
+        message: 'The type must be one of "{{ choices }}" but "{{ value }}" was given.'
+    )]
     private string $type; // Can be only "sell" or "buy"
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
-    private DateTimeInterface $createdAt;
+    private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
-    private DateTimeInterface $updatedAt;
+    private \DateTimeInterface $updatedAt;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?DateTimeInterface $deletedAt;
+    private ?\DateTimeInterface $deletedAt;
 
-    public function getId(): int
+    public function __construct()
+    {
+        $this->id = Uuid::uuid4();
+    }
+
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
@@ -115,32 +159,35 @@ class Transaction
         $this->type = $type;
     }
 
-    public function getCreatedAt(): DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeInterface $createdAt): void
+    #[ORM\PrePersist]
+    public function setCreatedAt(): void
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new \DateTimeImmutable();
+        $this->setUpdatedAt();
     }
 
-    public function getUpdatedAt(): DateTimeInterface
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(DateTimeInterface $updatedAt): void
+    #[ORM\PreUpdate]
+    public function setUpdatedAt(): void
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
-    public function getDeletedAt(): ?DateTimeInterface
+    public function getDeletedAt(): ?\DateTimeInterface
     {
         return $this->deletedAt;
     }
 
-    public function setDeletedAt(?DateTimeInterface $deletedAt): void
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
     {
         $this->deletedAt = $deletedAt;
     }
